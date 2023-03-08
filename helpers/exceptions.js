@@ -12,6 +12,9 @@ let exceptions ={
     eleventh:'октября',
     twelfth:'ноября',
     thirteenth:'декабря',
+    fourteenth:'ПРИДНЕСТРОВЬЕ',
+    fifteenth:'ИНТЕРВЬЮ',
+    sixteenth:'МНЕНИЕ',
 }
 module.exports =  {
     exceptions,
