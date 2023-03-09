@@ -14,9 +14,8 @@ const start = () => {
         const chatId = msg.chat.id;
 
         if (text === commands.start) {
-            return bot.sendMessage(chatId, messages.firstHello)
+            return bot.sendMessage(chatId, messages.firstHello, getOption('undefined'))
         }
-
 
         if (text === messages.request) {
             let document = [];
@@ -28,11 +27,13 @@ const start = () => {
            }
             for (let i = 0; i < 5; i++) {
                 lastNews++;
-                await bot.sendPhoto(chatId, document[i].img)
                 if (i === 4) {
-                    return  bot.sendMessage(chatId, `${document[i].headline}\n\n${document[i].time}`, getOption('continue', document, i))
+                    return  bot.sendPhoto(chatId, document[i].img, {caption: `${document[i].headline}\n\n${document[i].time}`,reply_markup:getOption('continue', document, i).reply_markup},)
                 } else {
-                    await bot.sendMessage(chatId, `${document[i].headline}\n\n${document[i].time}`, getOption('mess', document, i))
+                    await bot.sendPhoto(chatId, document[i].img, {
+                        caption : `${document[i].headline}\n\n${document[i].time}`,
+                        reply_markup:getOption('mess', document, i).reply_markup
+                    })
                 }
             }
 
@@ -51,20 +52,22 @@ const start = () => {
             try {
                 document = await tryGet()
             } catch (e) {
-                console.log('ccaattcchh')
+                console.log(e)
                 document = await tryGet()
             }
             let lN = lastNews
             for (let i = lN; i < lN + 5; i++) {
+                console.log(i)
+                console.log(document[i])
                 if (i===document.length-1) {
                     return bot.sendMessage(chatId, messages.end, getOption('undefined'))
                 }
                 lastNews++;
-                await bot.sendPhoto(chatId, document[i].img)
                 if (lastNews-lN ===5 ) {
-                    return bot.sendMessage(chatId, `${document[i].headline}\n\n${document[i].time}`, getOption('continue', document, i))
+                    return  bot.sendPhoto(chatId, document[i].img, {caption: `${document[i].headline}\n\n${document[i].time}`,reply_markup:getOption('continue', document, i).reply_markup})
+
                 } else {
-                    await bot.sendMessage(chatId, `${document[i].headline}\n\n${document[i].time}`, getOption('mess', document, i))
+                    await  bot.sendPhoto(chatId, document[i].img, {caption: `${document[i].headline}\n\n${document[i].time}`,reply_markup:getOption('mess', document, i).reply_markup})
                 }
             }
         }
