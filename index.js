@@ -4,13 +4,10 @@ const {token} = require('./helpers/TOKEN')
 const {getNews} = require('./helpers/parce1.js')
 const {getOption} = require('./helpers/options.js')
 const {messages, commands} = require('./helpers/messages.js')
+const {tryGet} = require("./helpers/try");
 const bot = new TelegramApi(token.TOKEN, {polling: true})
 
 let lastNews = 0;
-let Doc = Array;
-const getDocument = async () => {
-    Doc = await getNews();
-}
 const start = () => {
     bot.on('message', async msg => {
         const text = msg.text;
@@ -22,13 +19,17 @@ const start = () => {
 
 
         if (text === messages.request) {
-            await getDocument()
-            let document = Doc
+            let document = [];
+           try {
+               document = await tryGet()
+           } catch (e) {
+               console.log('ccaattcchh')
+               document = await tryGet()
+           }
             for (let i = 0; i < 5; i++) {
                 lastNews++;
                 await bot.sendPhoto(chatId, document[i].img)
                 if (i === 4) {
-                    console.log(i)
                     return  bot.sendMessage(chatId, `${document[i].headline}\n\n${document[i].time}`, getOption('continue', document, i))
                 } else {
                     await bot.sendMessage(chatId, `${document[i].headline}\n\n${document[i].time}`, getOption('mess', document, i))
@@ -36,7 +37,6 @@ const start = () => {
             }
 
         }
-
         return bot.sendMessage(chatId, messages.undefined, getOption('undefined'))
     })
 
@@ -46,20 +46,19 @@ const start = () => {
         const messageId = msg.message.message_id
         const option = msg.message.reply_markup
         const chatId = msg.message.chat.id;
-        if (lastNews >= 29) {
-            return bot.sendMessage(chatId, 'На этом пока всё, заходите к нам через время', {
-                reply_markup: JSON.stringify({
-                    keyboard: [[{text: messages.request, callback_data: messages.continue}]],
-                    resize_keyboard: true
-                })
-            })
-        }
         if (data === messages.continue) {
-            await getDocument()
-            let document = await Doc
+            let document = [];
+            try {
+                document = await tryGet()
+            } catch (e) {
+                console.log('ccaattcchh')
+                document = await tryGet()
+            }
             let lN = lastNews
             for (let i = lN; i < lN + 5; i++) {
-                console.log(i)
+                if (i===document.length-1) {
+                    return bot.sendMessage(chatId, messages.end, getOption('undefined'))
+                }
                 lastNews++;
                 await bot.sendPhoto(chatId, document[i].img)
                 if (lastNews-lN ===5 ) {

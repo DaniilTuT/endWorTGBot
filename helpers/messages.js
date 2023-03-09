@@ -5,6 +5,7 @@ let messages = {
     continue: 'Продолжить?',
     continue1: 'Загрузить ещё',
     undefined:'Моя твоя не понимать',
+    end:'На этом пока все, заходите позже, чтобы узнать новые новости'
 }
 let commands = {
     start: '/start',

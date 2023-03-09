@@ -39,7 +39,7 @@ const getNews = async () => {
         }
         html = html.replace(`${text}`, ' ')
     }
-    console.log(lastMass)
+    (lastMass >  []) ?console.log(`lastMass был выведен? ${lastMass[0].headline}`): 0
     return lastMass
 }
 getNews()
