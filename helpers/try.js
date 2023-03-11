@@ -1,4 +1,4 @@
-const {getNews} = require("./parce1");
+const {getNews} = require("../parcers/parce");
 
 const tryGet = async () => {
     try {

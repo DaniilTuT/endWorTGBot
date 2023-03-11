@@ -7,12 +7,7 @@ let messages = {
     undefined:'Моя твоя не понимать',
     end:'На этом пока все, заходите позже, чтобы узнать новые новости'
 }
-let commands = {
-    start: '/start',
-    continue: '/continue',
-}
 
 module.exports = {
     messages,
-    commands,
 }

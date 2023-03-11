@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node helpers/parce1.js",
-    "dev1": "node index.js",
+    "dev": "node index.js",
+    "dev-parcer": "node parcers/parce.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,7 +14,6 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "node-telegram-bot-api": "^0.60.0",
-    "pupeteer": "^0.0.1",
     "puppeteer": "^19.6.3"
   }
 }

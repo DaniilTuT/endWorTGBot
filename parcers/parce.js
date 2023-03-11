@@ -1,10 +1,10 @@
 const puppeteer = require('puppeteer')
-const {links} = require("./links");
+const {links} = require("../consts/links");
 const getNews = async () => {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
 
-    await page.goto("https://www.unian.net/tag/pridnestrove")
+    await page.goto(`${links.apiUrl}`)
 
     await page.waitForSelector('#block_left_column_content')
 
