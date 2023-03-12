@@ -4,7 +4,7 @@ const getNews = async () => {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
 
-    await page.goto(`${links.apiUrl}`)
+    await page.goto(`${links.newsApiUrl}`)
 
     await page.waitForSelector('#block_left_column_content')
 
@@ -42,7 +42,7 @@ const getNews = async () => {
     (lastMass >  []) ?console.log(`lastMass был выведен? ${lastMass[0].headline}`): 0
     return lastMass
 }
-getNews()
+
 
 module.exports = {
     getNews

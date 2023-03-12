@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "node index.js",
-    "dev-parcer": "node parcers/parce.js",
+    "dev-weather-parcer": "node parcers/weatherParcer.js",
+    "dev-parcer": "node parcers/newsParcer.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

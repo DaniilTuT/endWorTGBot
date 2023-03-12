@@ -1,6 +1,6 @@
 const {messages} = require("../consts/messages");
-const getOption = (option , document, i) => {
-    switch (option ) {
+const getOption = (option, document, i) => {
+    switch (option) {
         case 'mess': {
             return {
                 reply_markup: JSON.stringify({
@@ -21,10 +21,27 @@ const getOption = (option , document, i) => {
                 })
             }
         }
+        case messages.weatherRequest: {
+            return {
+                reply_markup: JSON.stringify({
+                    keyboard: [
+                        [
+                            {text: messages.full, callback_data: messages.full},
+                            {text: messages.briefly, callback_data: messages.briefly}
+                        ],
+                        [{text: messages.goBack, callback_data: messages.goBack}]
+                    ],
+                    resize_keyboard: true
+                })
+            }
+        }
         default : {
             return {
                 reply_markup: JSON.stringify({
-                    keyboard: [[{text: messages.request, callback_data: messages.request}]],
+                    keyboard: [
+                        [{text: messages.newsRequest, callback_data: messages.newsRequest}],
+                        [{text: messages.weatherRequest, callback_data: messages.weatherRequest}]
+                    ],
                     resize_keyboard: true
                 })
             }
