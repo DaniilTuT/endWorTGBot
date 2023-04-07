@@ -14,6 +14,7 @@ const bot = new TelegramApi(token.TOKEN, {polling: true})
 let lastLocation = {}
 let lastNewsIndex = 0;
 let isSearch = false
+let Doc = getNews()
 const start = () => {
 
 
