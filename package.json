@@ -7,7 +7,9 @@
     "dev": "node index.js",
     "dev-weather-parcer": "node parcers/weatherParcer.js",
     "dev-parcer": "node parcers/newsParcer.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "quiz": "node parcers/bankomat.js",
+    "exam": "node parcers/Задача.js"
   },
   "keywords": [],
   "author": "",

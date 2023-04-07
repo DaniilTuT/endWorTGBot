@@ -1,52 +1,53 @@
 const TelegramApi = require('node-telegram-bot-api')
 const {commands} = require('./consts/commands.js')
 const {messages} = require('./consts/messages.js')
+const {fullList} = require("./consts/const");
 const {token} = require('./env')
+const {capitalize} = require('./helpers/capitalize')
 const {getOption} = require('./helpers/getOption.js')
-const {tryGet} = require("./helpers/try");
+const {getNews} = require("./parcers/newsParcer");
 const {getWeather} = require("./parcers/weatherParcer");
 const {getDayWeather} = require("./parcers/dayWeatherParcer");
+
 const bot = new TelegramApi(token.TOKEN, {polling: true})
-let msgId = {}
+
+let lastLocation = {}
 let lastNewsIndex = 0;
+let isSearch = false
 const start = () => {
 
 
     bot.on('message', async msg => {
         const text = msg.text;
-        const messageId = msg.message_id
         const chatId = msg.chat.id;
 
         if (text === commands.start) {
-            msgId.chatId = msg.message_id
-
             return bot.sendMessage(chatId, messages.firstHello, getOption('undefined'))
         }
         if (text === messages.weatherRequest) {
-            console.log('hhhhhhhhhhhhhhh')
-            return bot.sendMessage(chatId,messages.choose,getOption(`${messages.weatherRequest}`))
+            return bot.sendMessage(chatId, messages.chooseLocation, getOption(`chooseLocation`))
         }
-
-        if (text === messages.briefly) {
-            await getDayWeather()
-            return bot.sendPhoto(chatId, 'E:\\CODEI.TI.schole\\endWorkTGBot\\consts\\weather.jpg', {
+        if (Object.keys(fullList).includes(capitalize(text))) {
+            lastLocation.chatId = fullList[capitalize(text)]
+            console.log(capitalize(text))
+            return bot.sendMessage(chatId, messages.chooseLocation, getOption(`${messages.weatherHandRequest}`,text))
+        }
+        if (text.includes(messages.full)) {
+            await getDayWeather(lastLocation.chatId)
+            return bot.sendPhoto(chatId, 'E:\\CODEI.TI.schole\\endWorkTGBot\\consts\\dayWeather.png', {
                 reply_markup: getOption('undefined').reply_markup
             })
         }
-        if (text === messages.full) {
-            await getWeather()
-            return bot.sendPhoto(chatId, 'E:\\CODEI.TI.schole\\endWorkTGBot\\consts\\dayWeather.jpg', {
+        if (text.includes(messages.briefly)) {
+            await getWeather(lastLocation.chatId)
+            return bot.sendPhoto(chatId, 'E:\\CODEI.TI.schole\\endWorkTGBot\\consts\\weather.png', {
                 reply_markup: getOption('undefined').reply_markup
             })
         }
         if (text === messages.newsRequest) {
             lastNewsIndex = 0;
-            let document = [];
-            try {
-                document = await tryGet()
-            } catch (e) {
-                document = await tryGet()
-            }
+            await getNews()
+            let document = await Doc
             for (let i = 0; i < 5; i++) {
                 lastNewsIndex++;
                 if (i === 4) {
@@ -68,10 +69,15 @@ const start = () => {
 
     bot.on('callback_query', async msg => {
         const data = msg.data;
-        // const mText = msg.message.text
-        // const messageId = msg.message.message_id
-        // const option = msg.message.reply_markup
         const chatId = msg.message.chat.id;
+        if (data === messages.chooseYourself) {
+            isSearch = true
+        }
+        if (data.includes('https')) {
+            console.log(data)
+            lastLocation.chatId = data
+            return bot.sendMessage(chatId, messages.chooseLocation, getOption(`${messages.weatherRequest}`, `${data}`))
+        }
         if (data === messages.continue) {
             let document = [];
             try {

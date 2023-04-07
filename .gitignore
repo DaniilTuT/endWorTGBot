@@ -1,3 +1,6 @@
 /node_modules
 .idea
 env.js
+/consts/weather.jpg
+/consts/dayWeather.jpg
+/screen.png
