@@ -1,11 +1,11 @@
 const TelegramApi = require('node-telegram-bot-api')
 const {commands} = require('./consts/commands.js')
 const {messages} = require('./consts/messages.js')
-const {fullList} = require("./consts/const");
+const {fullList} = require("./consts/linksForWeather");
 const {token} = require('./env')
 const {capitalize} = require('./helpers/capitalize')
 const {getOption} = require('./helpers/getOption.js')
-const {getNews} = require("./parcers/newsParcer");
+const {getNews} = require("./parcers/newsParcer1");
 const {getWeather} = require("./parcers/weatherParcer");
 const {getDayWeather} = require("./parcers/dayWeatherParcer");
 
@@ -28,10 +28,14 @@ const start = () => {
         if (text === messages.weatherRequest) {
             return bot.sendMessage(chatId, messages.chooseLocation, getOption(`chooseLocation`))
         }
-        if (Object.keys(fullList).includes(capitalize(text))) {
+        if (isSearch && Object.keys(fullList).includes(capitalize(text))) {
             lastLocation.chatId = fullList[capitalize(text)]
             console.log(capitalize(text))
+            isSearch = false
             return bot.sendMessage(chatId, messages.chooseLocation, getOption(`${messages.weatherHandRequest}`,text))
+        }
+        if (isSearch && !Object.keys(fullList).includes(capitalize(text))) {
+            return bot.sendMessage(chatId, messages.incorrectLocation, getOption(messages.incorrectLocation))
         }
         if (text.includes(messages.full)) {
             await getDayWeather(lastLocation.chatId)
@@ -79,13 +83,19 @@ const start = () => {
             lastLocation.chatId = data
             return bot.sendMessage(chatId, messages.chooseLocation, getOption(`${messages.weatherRequest}`, `${data}`))
         }
+        if (data === messages.no) {
+            isSearch = false
+        }
+        if (data === messages.yes) {
+            return bot.sendMessage(chatId, messages.chooseLocation)
+        }
         if (data === messages.continue) {
             let document = [];
             try {
-                document = await tryGet()
+                document = await Doc
             } catch (e) {
                 console.log(e)
-                document = await tryGet()
+                document = await Doc
             }
             let lN = lastNewsIndex
             for (let i = lN; i < lN + 5; i++) {

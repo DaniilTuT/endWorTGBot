@@ -13,7 +13,10 @@ let messages = {
     goBack:"Назад",
     chooseLocation: 'Выберите населенный пункт:',
     choose:'Выберите',
-    chooseYourself: 'Введите сами'
+    chooseYourself: 'Введите сами',
+    incorrectLocation: 'Введите название населенного пункта без грамматических ошибок\nПовторить попытку?',
+    yes: 'да',
+    no: 'нет',
 }
 
 module.exports = {

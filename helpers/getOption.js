@@ -1,5 +1,6 @@
 const {messages} = require("../consts/messages");
-const {mainList, fullList} = require("../consts/const");
+const {mainList, fullList} = require("../consts/linksForWeather");
+const {capitalize} = require("./capitalize");
 const getOption = (option, document, i) => {
     switch (option) {
         case 'mess': {
@@ -37,6 +38,19 @@ const getOption = (option, document, i) => {
                 })
             }
         }
+        case messages.incorrectLocation: {
+            return {
+                reply_markup: JSON.stringify({
+                    inline_keyboard: [
+                        [
+                            {text: messages.yes, callback_data: messages.yes},
+                            {text: messages.no, callback_data:messages.no}
+                        ],
+                    ],
+                    resize_keyboard: true
+                })
+            }
+        }
         case messages.weatherHandRequest: {
             console.log('0000000000000')
             console.log(document+'000')
@@ -44,8 +58,8 @@ const getOption = (option, document, i) => {
                 reply_markup: JSON.stringify({
                     keyboard: [
                         [
-                            {text: Object.keys(fullList)[Object.keys(fullList).indexOf(document)]+' '+messages.full, callback_data: messages.full},
-                            {text:  Object.keys(fullList)[Object.keys(fullList).indexOf(document)]+' '+messages.briefly, callback_data: messages.briefly}
+                            {text: capitalize(document)+' '+messages.full, callback_data: messages.full},
+                            {text:  capitalize(document)+' '+messages.briefly, callback_data: messages.briefly}
                         ],
                         [{text: messages.goBack, callback_data: messages.goBack}]
                     ],
